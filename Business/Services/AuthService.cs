@@ -1,4 +1,5 @@
-﻿using Business.Models;
+﻿using Business.Interfaces;
+using Business.Models;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -8,10 +9,11 @@ using System.Security.Claims;
 using System.Text;
 
 namespace Business.Services;
-public class AuthService(UserManager<UserEntity> userManager, IConfiguration config)
+public class AuthService(UserManager<UserEntity> userManager, IConfiguration config, IEmailService emailService)
 {
   private readonly IConfiguration _config = config;
   private readonly UserManager<UserEntity> _userManager = userManager;
+  private readonly IEmailService _emailService = emailService;
 
   public async Task<AuthResponse> SignInAsync(SignInForm form)
   {
@@ -37,6 +39,41 @@ public class AuthService(UserManager<UserEntity> userManager, IConfiguration con
         FirstName = user.FirstName,
         LastName = user.LastName,
         Roles = [.. roles],
+      },
+      Token = token,
+    };
+  }
+
+  public async Task<AuthResponse> RegisterAsync(SignUpForm form)
+  {
+    var user = new UserEntity
+    {
+      UserName = form.Email,
+      FirstName = form.FirstName,
+      LastName = form.LastName,
+      Email = form.Email,
+    };
+    var result = await _userManager.CreateAsync(user, form.Password);
+    if (!result.Succeeded)
+    {
+      return new AuthResponse
+      {
+        IsSuccess = false,
+        Message = string.Join(", ", result.Errors.Select(e => e.Description))
+      };
+    }
+    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+    await _userManager.AddToRoleAsync(user, "User");
+    await _emailService.SendVerificationEmailAsync(user.Email!, token);
+    return new AuthResponse
+    {
+      IsSuccess = true,
+      User = new User
+      {
+        Email = user.Email!,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        Roles = [],
       },
       Token = token,
     };
