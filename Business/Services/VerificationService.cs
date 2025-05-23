@@ -12,9 +12,7 @@ public class VerificationService(UserManager<UserEntity> userManager)
     if (user == null)
       return IdentityResult.Failed(new IdentityError { Description = "User not found" });
 
-     var result = await _userManager.ConfirmEmailAsync(user, token);
-      var referencedUser = await _userManager.FindByEmailAsync(email);
-    Console.WriteLine($"User: {referencedUser?.Email}");
+    var result = await _userManager.ConfirmEmailAsync(user, token);
     return result;
   }
 }

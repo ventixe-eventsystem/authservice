@@ -27,6 +27,15 @@ public class AuthService(UserManager<UserEntity> userManager, IConfiguration con
       };
     }
 
+    if (!user.EmailConfirmed)
+    {
+      return new AuthResponse
+      {
+        IsSuccess = false,
+        Message = "Email not confirmed"
+      };
+    }
+
     var token = await GenerateJwtToken(user);
     var roles = await _userManager.GetRolesAsync(user);
 
@@ -63,20 +72,11 @@ public class AuthService(UserManager<UserEntity> userManager, IConfiguration con
       };
     }
     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+    
     await _userManager.AddToRoleAsync(user, "User");
     await _emailService.SendVerificationEmailAsync(user.Email!, token);
-    return new AuthResponse
-    {
-      IsSuccess = true,
-      User = new User
-      {
-        Email = user.Email!,
-        FirstName = user.FirstName,
-        LastName = user.LastName,
-        Roles = [],
-      },
-      Token = token,
-    };
+
+    return new AuthResponse { IsSuccess = true };
   }
 
   public async Task<string> GenerateJwtToken(UserEntity user)

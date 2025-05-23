@@ -37,9 +37,7 @@ public class AuthController(AuthService authService, VerificationService verific
     return CreatedAtAction(nameof(SignIn), new { email = form.Email }, result);
   }
 
-  //[FromQuery]
-
-  [HttpPost("verify-email")]
+  [HttpGet("verify-email")]
   public async Task<IActionResult> VerifyEmail([FromQuery] string token, [FromQuery] string email)
   {
     if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))

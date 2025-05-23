@@ -1,6 +1,7 @@
 ﻿using Azure.Communication.Email;
 using Business.Interfaces;
 using Microsoft.Extensions.Configuration;
+using System.Web;
 
 namespace Infrastructure.Services;
 public class EmailService(EmailClient emailClient, IConfiguration config) : IEmailService
@@ -24,7 +25,7 @@ public class EmailService(EmailClient emailClient, IConfiguration config) : IEma
         <body>
           <h1>Email Verification</h1>
           <p>Please verify your email by clicking the link below:</p>
-          <a href='{_config["App:BaseUrl"]}/verify-email?token={token}&email={email}'>Verify Email</a>
+          <a href='{_config["App:BaseUrl"]}/verify-email?token={HttpUtility.UrlEncode(token)}&email={HttpUtility.UrlEncode(email)}'>Verify Email</a>
         </body>
       </html>";
 
