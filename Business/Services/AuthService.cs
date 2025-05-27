@@ -44,6 +44,7 @@ public class AuthService(UserManager<UserEntity> userManager, IConfiguration con
       IsSuccess = true,
       User = new User
       {
+        UserId = user.Id,
         Email = user.Email!,
         FirstName = user.FirstName,
         LastName = user.LastName,

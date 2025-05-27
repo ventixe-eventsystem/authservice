@@ -31,6 +31,7 @@ public class DatabaseSeeder
         Email = adminEmail,
         FirstName = "System",
         LastName = "Admin",
+        EmailConfirmed = true,
       };
       var result = await userManager.CreateAsync(adminUser, "Admin!123");
 
