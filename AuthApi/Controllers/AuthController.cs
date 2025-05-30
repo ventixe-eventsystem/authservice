@@ -49,4 +49,13 @@ public class AuthController(AuthService authService, VerificationService verific
 
     return BadRequest(result.Errors);
   }
+
+  [HttpPost("email")]
+  public async Task<IActionResult> EmailExists(string email)
+  {
+    if (string.IsNullOrEmpty(email))
+      return BadRequest("Email is required");
+    var exists = await _authService.EmailExistsAsync(email);
+    return Ok(new { Exists = !exists });
+  }
 }

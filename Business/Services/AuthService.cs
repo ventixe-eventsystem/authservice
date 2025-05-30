@@ -104,4 +104,13 @@ public class AuthService(UserManager<UserEntity> userManager, IConfiguration con
 
     return new JwtSecurityTokenHandler().WriteToken(token);
   }
+
+  public async Task<bool> EmailExistsAsync(string email)
+  {
+    if (string.IsNullOrWhiteSpace(email))
+      return false;
+
+      var user = await _userManager.FindByEmailAsync(email.Trim());
+    return user != null;
+  }
 }
