@@ -1,15 +1,15 @@
-﻿using Business.Models;
-using Business.Services;
+﻿using Business.Interfaces;
+using Business.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController(AuthService authService, VerificationService verificationService) : ControllerBase
+public class AuthController(IAuthService authService, IVerificationService verificationService) : ControllerBase
 {
-  private readonly AuthService _authService = authService;
-  private readonly VerificationService _verificationService = verificationService;
+  private readonly IAuthService _authService = authService;
+  private readonly IVerificationService _verificationService = verificationService;
 
   [HttpPost("signin")]
   public async Task<IActionResult> SignIn(SignInForm form)

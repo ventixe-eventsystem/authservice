@@ -44,8 +44,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
   });
 
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<VerificationService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IVerificationService, VerificationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
