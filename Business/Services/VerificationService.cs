@@ -1,8 +1,9 @@
-﻿using Data.Entities;
+﻿using Business.Interfaces;
+using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.Services;
-public class VerificationService(UserManager<UserEntity> userManager)
+public class VerificationService(UserManager<UserEntity> userManager) : IVerificationService
 {
   private readonly UserManager<UserEntity> _userManager = userManager;
 

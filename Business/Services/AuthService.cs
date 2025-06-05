@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 
 namespace Business.Services;
-public class AuthService(UserManager<UserEntity> userManager, IConfiguration config, IEmailService emailService)
+public class AuthService(UserManager<UserEntity> userManager, IConfiguration config, IEmailService emailService) : IAuthService
 {
   private readonly IConfiguration _config = config;
   private readonly UserManager<UserEntity> _userManager = userManager;
